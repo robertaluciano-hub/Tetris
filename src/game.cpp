@@ -7,6 +7,7 @@ Game::Game() {
     currentBlock = getRandomBlock();
     nextBlock = getRandomBlock();
     gameOver = false;
+    score = 0;
 }
 
 Block Game::getRandomBlock() {
@@ -27,7 +28,19 @@ std::vector<Block> Game::getAllBlocks() {
 
 void Game::draw() {
     grid.draw();
-    currentBlock.draw();
+    currentBlock.draw(11, 11);
+    switch (nextBlock.id)
+    {
+    case 3:
+        nextBlock.draw(255, 290);
+        break;
+    case 4:
+        nextBlock.draw(255, 280);
+        break;
+    
+    default:
+        nextBlock.draw(279, 270);
+    }
 }
 
 void Game::handleInput()
@@ -48,6 +61,7 @@ void Game::handleInput()
 
         case KEY_DOWN:
             moveBlockDown();
+            updateScore(0, 1);
             break;
         
         case KEY_UP:
@@ -95,7 +109,9 @@ void Game::lockBlock()
         gameOver = true;
     }
     nextBlock = getRandomBlock();
-    grid.clearFullRows();
+    int rowsCleared = grid.clearFullRows();
+    updateScore(rowsCleared, 0);
+
 }
 
 void Game::rotate() {
@@ -111,6 +127,7 @@ void Game::Reset()
     blocks = getAllBlocks();
     currentBlock = getRandomBlock();
     nextBlock = getRandomBlock();
+    score = 0;
 }
 
 bool Game::blockFits()
@@ -134,4 +151,23 @@ bool Game::isBlockOutside()
         }
     }
     return false;
+}
+
+void Game::updateScore(int linesCleared, int moveDownPoints)
+{
+    switch (linesCleared)
+    {
+    case 1:
+        score += 100;
+        break;
+    case 2:
+        score += 300;
+        break;
+    case 3:
+        score += 500;
+    default:
+        break;
+    }
+
+    score += moveDownPoints;
 }
