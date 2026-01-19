@@ -23,7 +23,7 @@ int main()
    // WindowShouldClose intercetta la pressione del tasto Esc oppure il click sulla X e in questi casi, restituisce True
    while(WindowShouldClose() == false) {
       game.handleInput();
-      if (eventTriggered(1)) {
+      if (eventTriggered(0.2)) {
          game.moveBlockDown();
       }
       BeginDrawing();
